@@ -7,8 +7,9 @@
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env dist/server.js",
-    "dev": "nodemon --env-file=.env dist/server.js",
-    "prepare": "husky install"
+    "dev": "npx tsc && nodemon --env-file=.env dist/server.js",
+    "prepare": "husky install",
+    "clean": "concurrently --kill-others \"rmdir logs\" \"rmdir node_modules\" \"rmdir dist\""
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -17,8 +18,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/morgan": "^1.9.9",
     "concurrently": "^8.2.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
