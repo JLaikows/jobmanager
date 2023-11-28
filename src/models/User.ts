@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 
-export type User = {
+export type UserLogin = {
+  email: string;
+  password: string;
+};
+
+export type User = UserLogin & {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
-  password: string;
   github?: string;
   linkedIn?: string;
 };

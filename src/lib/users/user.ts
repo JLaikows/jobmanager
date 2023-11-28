@@ -1,4 +1,4 @@
-import User, { User as UserType } from '../../models/User';
+import User, { UserLogin, User as UserType } from '../../models/User';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Logger from '../logger';
@@ -9,7 +9,6 @@ const secretOrKey = process.env.SECRET_OR_KEY;
  * @param {UserType} UserObject - User info is passed in to create a user
  * @param {Function} callback - takes a callback to call after the user is created
  * @returns {Promise<void>}
- *
  * */
 export const createUser = async (
   userInfo: Partial<UserType>,
@@ -27,6 +26,35 @@ export const createUser = async (
         const payload = { id: newUser.id, email: newUser.email };
         jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
       });
+    });
+  });
+};
+
+/**
+ * @description Attempts to login a user based on email and password. Returns error if password doesn't match, or user isn't found
+ * @param {UserLogin} UserLogin - User Login info
+ * @param {Function} callback - takes a callback for after the user is logged in
+ * @returns {Promise<void>}
+ */
+export const loginUser = async (
+  userInfo: UserLogin,
+  callback: (err: Error | null, token: string | undefined) => void,
+): Promise<void> => {
+  const { email, password } = userInfo;
+
+  User.findOne({ email }).then((user: UserType) => {
+    if (!user) {
+      throw new Error('Email not yet included in ');
+    }
+
+    bcryptjs.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        const payload = { id: user.id, username: user.email };
+
+        jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
+      } else {
+        throw new Error('Incorrect Password');
+      }
     });
   });
 };
