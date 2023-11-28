@@ -9,5 +9,5 @@ app.get("/", (req: Request, res: Response) => {
 const port = process.env.PORT;
 
 app.listen(port, () =>
-  console.log(`Job Manager ran successfully on port ${port}`)
+  console.log(`Job Manager ran successfully on port ${port}`),
 );
