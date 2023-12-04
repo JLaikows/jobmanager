@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 export type UserLogin = {
   email: string;
@@ -13,7 +13,6 @@ export type User = UserLogin & {
   linkedIn?: string;
 };
 
-//be sure to update User in types too :)
 const userSchema = new mongoose.Schema({
   firstName: {
     required: true,

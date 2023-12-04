@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import * as _ from 'lodash';
 import { UserLogin, User as UserType } from '../../models/User';
 import { createUser, loginUser } from '../../lib/users/user';
-import { Status } from '../../types/global';
+import { ResponseStatus } from '../../types/global';
 import { stringify } from 'querystring';
 import passport from 'passport';
 import Logger from '../../lib/logger';
@@ -14,7 +14,7 @@ router.post('/register', async (req: Request, res: Response) => {
   const userInfo: Partial<UserType> = req.body;
   const callback = (err: Error | null, token?: string) => {
     res.json({
-      status: Status.SUCCESS,
+      status: ResponseStatus.SUCCESS,
       token: 'Bearer ' + token,
     });
   };
@@ -26,7 +26,7 @@ router.post('/register', async (req: Request, res: Response) => {
     let message = 'Unknown Error Occured Creating User';
     if (e instanceof Error) message = e.message;
     res.status(400).json({
-      status: Status.FAILED,
+      status: ResponseStatus.FAILED,
       errorMessage: message,
     });
   }
@@ -36,7 +36,7 @@ router.post('/login', async (req: Request, res: Response) => {
   const userInfo: UserLogin = req.body;
   const callback = (err: Error | null, token?: string) => {
     res.json({
-      status: Status.SUCCESS,
+      status: ResponseStatus.SUCCESS,
       token: 'Bearer ' + token,
     });
   };
@@ -48,7 +48,7 @@ router.post('/login', async (req: Request, res: Response) => {
     let message = 'Unknown Error Occured Loggin in User';
     if (e instanceof Error) message = e.message;
     res.status(400).json({
-      status: Status.FAILED,
+      status: ResponseStatus.FAILED,
       errorMessage: message,
     });
   }
