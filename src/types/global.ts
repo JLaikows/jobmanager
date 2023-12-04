@@ -3,7 +3,7 @@ export enum ENV {
   PROD = 'production',
 }
 
-export enum Status {
+export enum ResponseStatus {
   FAILED = 'failed',
   SUCCESS = 'success',
 }

@@ -1,4 +1,4 @@
-import User, { UserLogin, User as UserType } from '../../models/User';
+import User, { UserLogin, User as TUser } from '../../models/User';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Logger from '../logger';
@@ -11,10 +11,12 @@ const secretOrKey = process.env.SECRET_OR_KEY;
  * @returns {Promise<void>}
  * */
 export const createUser = async (
-  userInfo: Partial<UserType>,
+  userInfo: Partial<TUser>,
   callback: (err: Error | null, token: string | undefined) => void,
 ): Promise<void> => {
-  const userExists: UserType = await User.findOne({ email: userInfo.email });
+  const userExists: TUser | null = await User.findOne({
+    email: userInfo.email,
+  });
   if (userExists) throw new Error('Email Already Taken');
   const user = new User(userInfo);
 
@@ -22,8 +24,8 @@ export const createUser = async (
     bcryptjs.hash(user.password, salt, async (err, hash) => {
       if (err) throw err;
       user.password = hash;
-      user.save().then((newUser: UserType) => {
-        const payload = { id: newUser.id, email: newUser.email };
+      user.save().then((newUser) => {
+        const payload = { id: newUser?.id, email: newUser.email };
         jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
       });
     });
@@ -42,7 +44,7 @@ export const loginUser = async (
 ): Promise<void> => {
   const { email, password } = userInfo;
 
-  User.findOne({ email }).then((user: UserType) => {
+  User.findOne({ email }).then((user) => {
     if (!user) {
       throw new Error('Email not yet included in ');
     }

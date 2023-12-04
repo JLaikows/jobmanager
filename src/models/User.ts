@@ -6,7 +6,7 @@ export type UserLogin = {
 };
 
 export type User = UserLogin & {
-  id: string;
+  _id: string;
   firstName: string;
   lastName: string;
   github?: string;

@@ -20,6 +20,7 @@ export type TContact = {
 };
 
 export type TOpportunity = {
+  _id: string;
   company: string;
   title: string;
   salary: {
@@ -31,16 +32,17 @@ export type TOpportunity = {
     minimum: number;
     maximum?: number;
   };
-  webPortal: {
+  webPortal?: {
     link: string;
     password: string;
     email?: string;
     username?: string;
   };
   status: Status;
-  lastChecked: Date;
+  lastChecked: String;
   contact?: TContact;
   secondaryContact?: TContact;
+  userId: string;
 };
 
 const contact = {
@@ -72,19 +74,22 @@ const opportunitySchema = new mongoose.Schema({
     },
   },
   webPortal: {
-    link: String,
-    password: String,
-    email: {
-      type: String,
-      required: false,
+    type: {
+      link: String,
+      password: String,
+      email: {
+        type: String,
+        required: false,
+      },
+      username: {
+        type: String,
+        required: false,
+      },
     },
-    username: {
-      type: String,
-      required: false,
-    },
+    required: false,
   },
   status: String,
-  lastChecked: Date,
+  lastChecked: String,
   contact: {
     type: contact,
     required: false,
@@ -93,6 +98,7 @@ const opportunitySchema = new mongoose.Schema({
     type: contact,
     required: false,
   },
+  userId: String,
 });
 
 export default mongoose.model('Opportunity', opportunitySchema);

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { UserLogin, User as UserType } from '../../models/User';
+import { UserLogin, User as TUser } from '../../models/User';
 import { createUser, loginUser } from '../../lib/users/user';
 import { ResponseStatus } from '../../types/global';
 import { stringify } from 'querystring';
@@ -11,7 +11,7 @@ const router = express.Router();
 
 //todo: remove callback and call res.json in the main post body
 router.post('/register', async (req: Request, res: Response) => {
-  const userInfo: Partial<UserType> = req.body;
+  const userInfo: Partial<TUser> = req.body;
   const callback = (err: Error | null, token?: string) => {
     res.json({
       status: ResponseStatus.SUCCESS,

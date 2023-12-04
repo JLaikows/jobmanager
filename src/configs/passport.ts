@@ -1,6 +1,5 @@
 import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
 import User from '../models/User';
-import { User as UserType } from '../models/User';
 
 const jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 const secretOrKey = process.env.SECRET_OR_KEY;
@@ -12,7 +11,7 @@ const options: StrategyOptions = {
 export const initializePassport = (passport: any) => {
   passport.use(
     new Strategy(options, (jwt_payload, done) => {
-      User.findById(jwt_payload.id).then((user: UserType) => {
+      User.findById(jwt_payload.id).then((user) => {
         if (user) {
           // return the user to the frontend
           return done(null, user);
