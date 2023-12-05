@@ -10,7 +10,6 @@ const initialState: any | undefined = {
 };
 
 const userReducer = (state = initialState, action: any) => {
-  console.log(state);
   switch (action.type) {
     case UserActions.UPDATE_PREFERENCES:
       return {

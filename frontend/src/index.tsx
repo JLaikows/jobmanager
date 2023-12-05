@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './store/index';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './styles/theme';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -13,9 +16,13 @@ const defaultStore = store({});
 
 root.render(
   <React.StrictMode>
-    <Provider store={defaultStore}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Provider store={defaultStore}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>,
 );
 
