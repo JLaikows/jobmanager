@@ -2,6 +2,22 @@ import { ObjectId } from 'mongodb';
 import Opportunity, { Status, TOpportunity } from '../../models/Opportunity';
 
 /**
+ * @description gets opportunities for given user
+ * @param userId userId to filter opportunities
+ * @param callback callback to return response
+ */
+export const getOpportunities = async (
+  userId: string,
+  callback: (opportunitiesList: any) => void,
+): Promise<void> => {
+  if (!userId) throw new Error('No User Found');
+
+  Opportunity.find({ userId }).then((opportunitiesList) => {
+    callback(opportunitiesList);
+  });
+};
+
+/**
  * @description creates a new opportunity from a passed in opportunity object. Runs provided callback after opportunity is created.
  * @param opportunityInfo Partial-TOpportunity
  * @param userId string
