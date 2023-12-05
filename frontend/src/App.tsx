@@ -1,7 +1,7 @@
 import './App.css';
 import { Button } from '@mui/material';
 import { Route, Routes } from 'react-router';
-import RequireAuth from './utils/requireAuth';
+import RequireAuth from './components/requireAuth';
 
 function App() {
   return (

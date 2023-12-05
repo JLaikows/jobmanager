@@ -6,8 +6,7 @@ export enum OpportunityActions {
 }
 
 const initialState: any | undefined = {
-  isAuthenticated: false,
-  Opportunity: {},
+  opportunity: {},
 };
 
 const opportunityReducer = (state = initialState, action: any) => {
