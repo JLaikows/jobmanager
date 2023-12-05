@@ -3,11 +3,38 @@ import { TOpportunity } from '../../models/Opportunity';
 import passport from 'passport';
 import {
   createOpportunity,
+  getOpportunities,
   updateLastChecked,
   updateOpportunity,
 } from '../../lib/opportunities/opportunities';
 import { ResponseStatus } from '../../types/global';
 const router = express.Router();
+
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    const user: any = req.user;
+    const callback = (opportunity: TOpportunity) => {
+      res.json({
+        status: ResponseStatus.SUCCESS,
+        opportunity: opportunity,
+      });
+    };
+
+    try {
+      await getOpportunities(user.id, callback);
+      //response is returned in the above callback
+    } catch (e) {
+      let message = 'Unknown Error Occured Creating Opportunity';
+      if (e instanceof Error) message = e.message;
+      res.status(400).json({
+        status: ResponseStatus.FAILED,
+        errorMessage: message,
+      });
+    }
+  },
+);
 
 router.post(
   '/',
