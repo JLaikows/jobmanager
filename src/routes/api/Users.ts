@@ -20,12 +20,19 @@ router.post('/register', async (req: Request, res: Response) => {
   };
 
   try {
-    await createUser(userInfo, callback);
+    await createUser(userInfo, callback).catch((e) => {
+      let message = 'Unknown Error Occured Creating User';
+      if (e instanceof Error) message = e.message;
+      res.status(500).json({
+        status: ResponseStatus.FAILED,
+        errorMessage: message,
+      });
+    });
     //response is returned in the above callback
   } catch (e) {
     let message = 'Unknown Error Occured Creating User';
     if (e instanceof Error) message = e.message;
-    res.status(400).json({
+    res.status(500).json({
       status: ResponseStatus.FAILED,
       errorMessage: message,
     });
@@ -42,12 +49,19 @@ router.post('/login', async (req: Request, res: Response) => {
   };
 
   try {
-    await loginUser(userInfo, callback);
+    await loginUser(userInfo, callback).catch((e) => {
+      let message = 'Unknown Error Occured Loggin in User';
+      if (e instanceof Error) message = e.message;
+      res.status(500).json({
+        status: ResponseStatus.FAILED,
+        errorMessage: message,
+      });
+    });
     //response is returned in the above callback
   } catch (e) {
     let message = 'Unknown Error Occured Loggin in User';
     if (e instanceof Error) message = e.message;
-    res.status(400).json({
+    res.status(500).json({
       status: ResponseStatus.FAILED,
       errorMessage: message,
     });
@@ -61,7 +75,7 @@ router.get(
     const user = req.user;
     if (!user) {
       Logger.warn('No current User found');
-      res.status(400).json({
+      res.status(500).json({
         errorMessage: 'No Current User Found',
       });
       return;
