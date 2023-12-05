@@ -5,8 +5,7 @@ export enum UserActions {
 }
 
 const initialState: any | undefined = {
-  isAuthenticated: false,
-  user: {},
+  user: null,
 };
 
 const userReducer = (state = initialState, action: any) => {
@@ -14,13 +13,11 @@ const userReducer = (state = initialState, action: any) => {
     case UserActions.UPDATE_PREFERENCES:
       return {
         ...state,
-        isAuthenticated: !!action.currentUser,
         user: action.currentUser,
       };
     case UserActions.LOGOUT:
       return {
-        isAuthenticated: false,
-        user: undefined,
+        user: null,
       };
     case UserActions.LOGIN:
       return {

@@ -8,11 +8,23 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './styles/theme';
 import { BrowserRouter } from 'react-router-dom';
+import { setAuthToken } from './utils/Auth';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
-const defaultStore = store({});
+
+let defaultStore;
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  const decodedUser = jwt_decode(localStorage.jwtToken);
+  const preloadedState = {
+    user: decodedUser,
+  };
+  defaultStore = store(preloadedState);
+} else {
+  defaultStore = store({});
+}
 
 root.render(
   <React.StrictMode>
@@ -30,3 +42,6 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+function jwt_decode(jwtToken: any) {
+  throw new Error('Function not implemented.');
+}
