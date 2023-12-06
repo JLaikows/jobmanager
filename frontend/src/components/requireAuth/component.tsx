@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Login } from '../../pages/Login/lindex';
 
 interface IRequireAuth {
   user: any;
@@ -9,7 +10,7 @@ const RequireAuth: FC<IRequireAuth> = ({ user, children }) => {
   if (user) {
     return children;
   }
-  return null;
+  return <Login />;
 };
 
 export default RequireAuth;

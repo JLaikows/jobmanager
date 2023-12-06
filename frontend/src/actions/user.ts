@@ -4,12 +4,12 @@ import { TLoginUser, TSignUpUser, TUser } from '../types/user';
 import * as authAPI from '../utils/auth';
 import { addError } from './error';
 
-export const loginUser = (user: TUser) => ({
+const loginUser = (user: TUser) => ({
   type: UserActions.LOGIN,
   user,
 });
 
-export const logoutUser = () => ({
+const logoutUser = () => ({
   type: UserActions.LOGOUT,
 });
 
