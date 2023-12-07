@@ -9,15 +9,17 @@ import jwt from 'jsonwebtoken';
 const secretOrKey = process.env.SECRET_OR_KEY;
 const router = express.Router();
 
+const USER_RETURN_VALUES = [
+  'email',
+  'firstName',
+  'lastName',
+  'linkedIn',
+  'github',
+];
+
 //todo: remove callback and call res.json in the main post body
 router.post('/register', async (req: Request, res: Response) => {
   const userInfo: Partial<TUser> = req.body;
-  const callback = (err: Error | null, token?: string) => {
-    res.json({
-      status: ResponseStatus.SUCCESS,
-      token: 'Bearer ' + token,
-    });
-  };
 
   const userExists: TUser | null = await User.findOne({
     email: userInfo.email,
@@ -30,32 +32,38 @@ router.post('/register', async (req: Request, res: Response) => {
   const user = new User(userInfo);
 
   bcryptjs.genSalt(10, (err, salt) => {
-    if (err)
+    if (err) {
       res
         .status(500)
         .json({ status: ResponseStatus.FAILED, errorMessage: err.message });
+    }
     bcryptjs.hash(user.password, salt, async (err, hash) => {
-      if (err)
+      if (err) {
         res
           .status(500)
           .json({ status: ResponseStatus.FAILED, errorMessage: err.message });
+      }
       user.password = hash;
       user.save().then((newUser) => {
         const payload = { id: newUser?.id, email: newUser.email };
-        jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
+        jwt.sign(
+          payload,
+          secretOrKey as string,
+          { expiresIn: 3600 },
+          (err: Error | null, token?: string) => {
+            res.json({
+              status: ResponseStatus.SUCCESS,
+              token: 'Bearer ' + token,
+              user: _.pick(user, USER_RETURN_VALUES),
+            });
+          },
+        );
       });
     });
   });
 });
 
 router.post('/login', async (req: Request, res: Response) => {
-  const callback = (err: Error | null, token?: string) => {
-    res.json({
-      status: ResponseStatus.SUCCESS,
-      token: 'Bearer ' + token,
-    });
-  };
-
   const { email, password } = req.body;
 
   User.findOne({ email }).then((user) => {
@@ -71,7 +79,18 @@ router.post('/login', async (req: Request, res: Response) => {
       if (isMatch) {
         const payload = { id: user?._id, username: user?.email };
 
-        jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
+        jwt.sign(
+          payload,
+          secretOrKey as string,
+          { expiresIn: 3600 },
+          (err: Error | null, token?: string) => {
+            res.json({
+              status: ResponseStatus.SUCCESS,
+              token: 'Bearer ' + token,
+              user: _.pick(user, USER_RETURN_VALUES),
+            });
+          },
+        );
       } else {
         res.status(500).json({
           status: ResponseStatus.FAILED,
@@ -94,7 +113,7 @@ router.get(
       });
       return;
     }
-    res.json(_.omit(user, ['password']));
+    res.json(_.pick(user, USER_RETURN_VALUES));
   },
 );
 
