@@ -73,7 +73,6 @@ export const updateOpportunity = async (
   callback: (opportunity: any) => void,
 ): Promise<void> => {
   const { _id, ...opportunityPayload } = opportunityInfo;
-  console.log(opportunityPayload);
 
   Opportunity.findById(_id).then((opportunity) => {
     if (!opportunity) throw new Error('No Opportunity Found');

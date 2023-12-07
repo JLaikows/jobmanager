@@ -2,11 +2,12 @@ import './App.css';
 import { Button } from '@mui/material';
 import { Route, Routes } from 'react-router';
 import RequireAuth from './components/requireAuth';
+import LogoutButton from './components/logoutButton';
 
 function App() {
   const Home = (
     <RequireAuth>
-      <Button>Contact</Button>
+      <LogoutButton />
     </RequireAuth>
   );
 

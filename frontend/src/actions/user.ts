@@ -1,10 +1,10 @@
 import { UserActions } from '../reducers/user';
 import { jwtDecode } from 'jwt-decode';
-import { TLoginUser, TSignUpUser, TUser } from '../types/user';
+import { TLoginUser, TSignUpUser } from '../types/user';
 import * as authAPI from '../utils/auth';
 import { addError } from './error';
 
-const loginUser = (user: TUser) => ({
+const loginUser = (user: TLoginUser) => ({
   type: UserActions.LOGIN,
   user,
 });
@@ -21,10 +21,10 @@ export const signup = (user: TSignUpUser) => (dispatch: any) =>
       localStorage.setItem('jwtToken', token);
       authAPI.setAuthToken(token);
       const decoded = jwtDecode(token);
-      dispatch(loginUser(decoded as any));
+      dispatch(loginUser(decoded as TLoginUser));
     })
     .catch((err) => {
-      dispatch(addError(err.response.data));
+      dispatch(addError(err.message));
     });
 
 export const login = (user: TLoginUser) => (dispatch: any) =>
@@ -38,10 +38,11 @@ export const login = (user: TLoginUser) => (dispatch: any) =>
       dispatch(loginUser(decoded as any));
     })
     .catch((err) => {
-      dispatch(addError(err.response.data));
+      dispatch(addError(err.message));
     });
 
 export const logout = () => (dispatch: any) => {
+  console.log('hit');
   localStorage.removeItem('jwtToken');
   authAPI.setAuthToken(null);
   dispatch(logoutUser());

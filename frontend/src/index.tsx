@@ -25,6 +25,7 @@ if (localStorage.jwtToken) {
 } else {
   defaultStore = store({});
 }
+(window as any).store = defaultStore;
 
 root.render(
   <React.StrictMode>

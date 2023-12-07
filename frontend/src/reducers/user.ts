@@ -4,25 +4,16 @@ export enum UserActions {
   UPDATE_PREFERENCES = 'UPDATE_PREFERENCES',
 }
 
-const initialState: any | undefined = {
-  user: null,
-};
+const initialState: any | null = null;
 
 const userReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case UserActions.UPDATE_PREFERENCES:
-      return {
-        ...state,
-        user: action.currentUser,
-      };
+      return action.user;
     case UserActions.LOGOUT:
-      return {
-        user: null,
-      };
+      return null;
     case UserActions.LOGIN:
-      return {
-        ...state,
-      };
+      return action.user;
     default:
       return state;
   }

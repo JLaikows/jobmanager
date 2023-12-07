@@ -8,6 +8,7 @@ import { ApiRouter } from './src/routes/api';
 import { initializePassport } from './src/configs/passport';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 const port = process.env.PORT ?? '3000';
 const env = process.env.NODE_ENV ?? 'development';
 const mongoString = process.env.MONGODB_KEY ?? '';
@@ -26,6 +27,7 @@ try {
   });
 
   //setup middlewares
+  app.use(cors({ origin: 'http://localhost:3000' }));
   app.use(morganMiddleware);
   app.use(passport.initialize());
   initializePassport(passport);

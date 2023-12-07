@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import userReducer from './user';
+import user from './user';
 import errorReducer from './errors';
 import opportunityReducer from './opportunities';
 
 const RootReducer = combineReducers({
-  userReducer,
+  user,
   opportunityReducer,
   errorReducer,
 });

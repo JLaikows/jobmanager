@@ -1,11 +1,11 @@
 import express, { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { UserLogin, User as TUser } from '../../models/User';
-import { createUser, loginUser } from '../../lib/users/user';
+import User, { User as TUser } from '../../models/User';
 import { ResponseStatus } from '../../types/global';
-import { stringify } from 'querystring';
+import bcryptjs from 'bcryptjs';
 import passport from 'passport';
 import Logger from '../../lib/logger';
+import jwt from 'jsonwebtoken';
 const secretOrKey = process.env.SECRET_OR_KEY;
 const router = express.Router();
 
@@ -19,28 +19,36 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   };
 
-  try {
-    await createUser(userInfo, callback).catch((e) => {
-      let message = 'Unknown Error Occured Creating User';
-      if (e instanceof Error) message = e.message;
-      res.status(500).json({
-        status: ResponseStatus.FAILED,
-        errorMessage: message,
-      });
-    });
-    //response is returned in the above callback
-  } catch (e) {
-    let message = 'Unknown Error Occured Creating User';
-    if (e instanceof Error) message = e.message;
+  const userExists: TUser | null = await User.findOne({
+    email: userInfo.email,
+  });
+  if (userExists)
     res.status(500).json({
       status: ResponseStatus.FAILED,
-      errorMessage: message,
+      errorMessage: 'Email Already Taken',
     });
-  }
+  const user = new User(userInfo);
+
+  bcryptjs.genSalt(10, (err, salt) => {
+    if (err)
+      res
+        .status(500)
+        .json({ status: ResponseStatus.FAILED, errorMessage: err.message });
+    bcryptjs.hash(user.password, salt, async (err, hash) => {
+      if (err)
+        res
+          .status(500)
+          .json({ status: ResponseStatus.FAILED, errorMessage: err.message });
+      user.password = hash;
+      user.save().then((newUser) => {
+        const payload = { id: newUser?.id, email: newUser.email };
+        jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
+      });
+    });
+  });
 });
 
 router.post('/login', async (req: Request, res: Response) => {
-  const userInfo: UserLogin = req.body;
   const callback = (err: Error | null, token?: string) => {
     res.json({
       status: ResponseStatus.SUCCESS,
@@ -48,24 +56,30 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   };
 
-  try {
-    await loginUser(userInfo, callback).catch((e) => {
-      let message = 'Unknown Error Occured Loggin in User';
-      if (e instanceof Error) message = e.message;
+  const { email, password } = req.body;
+
+  User.findOne({ email }).then((user) => {
+    if (!user) {
       res.status(500).json({
         status: ResponseStatus.FAILED,
-        errorMessage: message,
+        errorMessage: 'Email doesn`t exist in database',
       });
+      return;
+    }
+
+    bcryptjs.compare(password, user?.password || '').then((isMatch) => {
+      if (isMatch) {
+        const payload = { id: user?._id, username: user?.email };
+
+        jwt.sign(payload, secretOrKey as string, { expiresIn: 3600 }, callback);
+      } else {
+        res.status(500).json({
+          status: ResponseStatus.FAILED,
+          errorMessage: 'Incorrect Password',
+        });
+      }
     });
-    //response is returned in the above callback
-  } catch (e) {
-    let message = 'Unknown Error Occured Loggin in User';
-    if (e instanceof Error) message = e.message;
-    res.status(500).json({
-      status: ResponseStatus.FAILED,
-      errorMessage: message,
-    });
-  }
+  });
 });
 
 router.get(

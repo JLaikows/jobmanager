@@ -69,7 +69,6 @@ router.post(
   async (req: Request, res: Response) => {
     const opportunityId = req.params.id;
     const user: any = req.user;
-    console.log(user, ' + ', opportunityId);
     const callback = (opportunity: TOpportunity) => {
       res.json({
         status: ResponseStatus.SUCCESS,
