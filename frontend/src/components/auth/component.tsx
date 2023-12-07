@@ -59,7 +59,7 @@ export const Auth: FC<IAuth> = ({ login, signUp }) => {
         display: 'flex',
         flexDirection: 'column',
         padding: '10% 5%',
-        margin: '10% 0%',
+        // margin: '10% 0%',
         width: '80%',
         border: '2px solid #7A8D7D',
         borderRadius: '10px',

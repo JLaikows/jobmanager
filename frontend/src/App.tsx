@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 import { Route, Routes } from 'react-router';
 import RequireAuth from './components/requireAuth';
 import LogoutButton from './components/logoutButton';
+import OpportunitiesPage from './pages/Opportunities';
 
 function App() {
   const Home = (
@@ -14,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Button>Home</Button>}></Route>
+        <Route path="/" element={<OpportunitiesPage />} />
         <Route path="/contact" element={Home} />
       </Routes>
     </div>

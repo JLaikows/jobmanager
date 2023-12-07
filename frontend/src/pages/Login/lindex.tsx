@@ -9,7 +9,7 @@ export const Login: FC = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
-        height: '100vh',
+        height: '70vh',
       }}
     >
       <Auth />

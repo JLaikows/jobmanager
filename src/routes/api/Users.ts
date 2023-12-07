@@ -113,7 +113,7 @@ router.get(
       });
       return;
     }
-    res.json(_.pick(user, USER_RETURN_VALUES));
+    res.json({ user: _.pick(user, USER_RETURN_VALUES) });
   },
 );
 
