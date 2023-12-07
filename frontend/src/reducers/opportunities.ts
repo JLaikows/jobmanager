@@ -14,11 +14,11 @@ const opportunityReducer = (state = initialState, action: any) => {
     case OpportunityActions.UPDATE_OPPORTUNITY:
       return {
         ...state,
-        ...action.value,
+        ...action.opportunities,
       };
     case OpportunityActions.GET_OPPORTUNITIES:
       return {
-        ...state,
+        ...action.opportunities,
       };
     case UserActions.LOGOUT:
       return {};

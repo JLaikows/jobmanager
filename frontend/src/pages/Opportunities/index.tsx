@@ -7,7 +7,7 @@ const mSTP = (state: any) => ({
 });
 
 const mDTP = (dispatch: any) => ({
-  getAllOpportunities: () => dispatch(getAllOpportunities),
+  getAllOpportunities: () => dispatch(getAllOpportunities()),
 });
 
 export default connect(mSTP, mDTP)(OpportunitiesPage);

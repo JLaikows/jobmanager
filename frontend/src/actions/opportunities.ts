@@ -9,8 +9,8 @@ const getAll = (opportunities: any) => ({
 
 export const getAllOpportunities = () => (dispatch: any) => {
   APIUtil.getAllOpportunities().then((res) => {
-    const { opportunites } = res.data;
-    const opportunitiesObject = _.keyBy(opportunites, '_id');
+    const { opportunities } = res.data;
+    const opportunitiesObject = _.keyBy(opportunities, '_id');
     dispatch(getAll(opportunitiesObject));
   });
 };
