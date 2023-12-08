@@ -11,7 +11,7 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { status, company, title, ...fullInfo } = opportunity;
   const extraInfo = {
-    'Full Time': opportunity.hours.fullTime,
+    'Full Time': opportunity?.hours?.fullTime,
     Title: opportunity.title,
   };
   return (
@@ -32,7 +32,14 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
         }}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'left',
+            flexDirection: 'column',
+            textAlign: 'left',
+          }}
+        >
           <Typography>{company}</Typography>
           <Typography fontSize="small">{title}</Typography>
         </Box>
@@ -55,6 +62,7 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
               display: 'grid',
               gridTemplateColumns: '45% 45%',
               width: '90%',
+              padding: '2%',
             }}
           >
             {Object.entries(extraInfo).map((keyValue) => (

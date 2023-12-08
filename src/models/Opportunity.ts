@@ -12,6 +12,16 @@ export type Milestone = {
   completed: boolean;
 };
 
+//todo: update address to use google api
+//todo: implement into opportunities
+export type Address = {
+  street: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  country: string;
+};
+
 export type TContact = {
   name: string;
   title: string;

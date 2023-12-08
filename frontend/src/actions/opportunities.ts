@@ -2,6 +2,7 @@ import { OpportunityActions } from '../reducers/opportunities';
 import * as _ from 'lodash';
 import * as APIUtil from '../utils/opportunities';
 import { addError } from './error';
+import toast from 'react-hot-toast';
 
 const getAll = (opportunities: any) => ({
   type: OpportunityActions.GET_OPPORTUNITIES,
@@ -16,6 +17,7 @@ export const getAllOpportunities = () => (dispatch: any) => {
       dispatch(getAll(opportunitiesObject));
     })
     .catch((err) => {
+      toast.error(err.message);
       dispatch(addError(err.message));
     });
 };

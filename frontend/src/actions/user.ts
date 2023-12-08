@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { UserActions } from '../reducers/user';
 import { TLoginUser, TSignUpUser, TUser } from '../types/user';
 import * as authAPI from '../utils/auth';
@@ -27,6 +28,7 @@ export const signup = (user: TSignUpUser) => (dispatch: any) =>
       dispatch(loginUser(user));
     })
     .catch((err) => {
+      toast.error(err.message);
       dispatch(addError(err.message));
     });
 
@@ -40,6 +42,7 @@ export const login = (user: TLoginUser) => (dispatch: any) =>
       dispatch(loginUser(user as any));
     })
     .catch((err) => {
+      toast.error(err.message);
       dispatch(addError(err.message));
     });
 
@@ -51,6 +54,7 @@ export const getCurrentUser = () => (dispatch: any) => {
       dispatch(updateUser(user));
     })
     .catch((err) => {
+      toast.error(err.message);
       dispatch(addError(err.message));
     });
 };

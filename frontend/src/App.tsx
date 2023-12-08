@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router';
 import RequireAuth from './components/requireAuth';
 import LogoutButton from './components/logoutButton';
 import OpportunitiesPage from './pages/Opportunities';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const Home = (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<OpportunitiesPage />} />
         <Route path="/contact" element={Home} />
       </Routes>
+      <Toaster />
     </div>
   );
 }
