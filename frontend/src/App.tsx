@@ -5,6 +5,7 @@ import RequireAuth from './components/requireAuth';
 import LogoutButton from './components/logoutButton';
 import OpportunitiesPage from './pages/Opportunities';
 import { Toaster } from 'react-hot-toast';
+import { CreateOpportunityPage } from './pages/CreateOpportunity';
 
 function App() {
   const Home = (
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<OpportunitiesPage />} />
         <Route path="/contact" element={Home} />
+        <Route path="/create" element={<CreateOpportunityPage />} />
       </Routes>
       <Toaster />
     </div>
