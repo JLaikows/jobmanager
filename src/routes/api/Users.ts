@@ -49,7 +49,7 @@ router.post('/register', async (req: Request, res: Response) => {
         jwt.sign(
           payload,
           secretOrKey as string,
-          { expiresIn: 3600 },
+          {},
           (err: Error | null, token?: string) => {
             res.json({
               status: ResponseStatus.SUCCESS,
@@ -82,7 +82,7 @@ router.post('/login', async (req: Request, res: Response) => {
         jwt.sign(
           payload,
           secretOrKey as string,
-          { expiresIn: 3600 },
+          {},
           (err: Error | null, token?: string) => {
             res.json({
               status: ResponseStatus.SUCCESS,
