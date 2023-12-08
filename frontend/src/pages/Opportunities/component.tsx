@@ -1,5 +1,7 @@
 import { FC, useEffect } from 'react';
 import RequireAuth from '../../components/requireAuth';
+import MobileOpportunityTable from '../../components/mobile/OpportunitiyTable';
+import { Box } from '@mui/material';
 
 interface IOpportunitiesPage {
   opportunities: any[];
@@ -15,9 +17,15 @@ export const OpportunitiesPage: FC<IOpportunitiesPage> = ({
 
   return (
     <RequireAuth>
-      {opportunities.map((opportunity) => {
-        return opportunity.company;
-      })}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '1%',
+        }}
+      >
+        <MobileOpportunityTable />
+      </Box>
     </RequireAuth>
   );
 };
