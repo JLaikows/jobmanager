@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { FC } from 'react';
 
 interface ILogoutButton {
@@ -6,5 +6,11 @@ interface ILogoutButton {
 }
 
 export const LogoutButton: FC<ILogoutButton> = ({ logout }) => {
-  return <Button onClick={logout}>LogOut</Button>;
+  return (
+    <Button variant="text" color="secondary" onClick={logout}>
+      <Typography fontWeight="bold" color="white">
+        LogOut
+      </Typography>
+    </Button>
+  );
 };

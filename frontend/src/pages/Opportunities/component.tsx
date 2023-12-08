@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react';
 import RequireAuth from '../../components/requireAuth';
 import MobileOpportunityTable from '../../components/mobile/OpportunitiyTable';
 import { Box } from '@mui/material';
+import { Taskbar } from '../../components/mobile/TaskBar';
 
 interface IOpportunitiesPage {
   opportunities: any[];
@@ -17,6 +18,7 @@ export const OpportunitiesPage: FC<IOpportunitiesPage> = ({
 
   return (
     <RequireAuth>
+      <Taskbar />
       <Box
         sx={{
           display: 'flex',

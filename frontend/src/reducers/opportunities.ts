@@ -3,6 +3,7 @@ import { UserActions } from './user';
 export enum OpportunityActions {
   GET_OPPORTUNITIES = 'GET_OPPORTUNITES',
   UPDATE_OPPORTUNITY = 'UPDATE_OPPORTUNITY',
+  ADD_OPPORTUNITY = 'ADD_OPPORTUNITY',
 }
 
 const initialState: any | undefined = {
@@ -18,6 +19,11 @@ const opportunityReducer = (state = initialState, action: any) => {
       };
     case OpportunityActions.GET_OPPORTUNITIES:
       return {
+        ...action.opportunities,
+      };
+    case OpportunityActions.ADD_OPPORTUNITY:
+      return {
+        ...state,
         ...action.opportunities,
       };
     case UserActions.LOGOUT:
