@@ -20,8 +20,6 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        // padding: '10% 5%',
-        // margin: '10% 0%',
         border: '2px solid #7A8D7D',
         transitionDuration: '1s',
       }}
