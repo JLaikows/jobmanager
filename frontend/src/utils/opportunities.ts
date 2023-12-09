@@ -8,5 +8,11 @@ export const getAllOpportunities = () => {
 };
 
 export const createOpportunity = (opportunity: any) => {
-  return axios.post(apiServer + '/opportunites/create', opportunity);
+  return axios.post(apiServer + '/opportunities', opportunity);
+};
+
+export const updateLastChecked = (opportunityId: string) => {
+  return axios.post(
+    apiServer + `/opportunities/${opportunityId}/update-last-checked`,
+  );
 };

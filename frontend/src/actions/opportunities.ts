@@ -39,3 +39,16 @@ export const createOpportunity = (opportunity: any) => (dispatch: any) => {
       dispatch(addError(err.message));
     });
 };
+
+export const updateLastChecked = (opportunityId: string) => (dispatch: any) => {
+  APIUtil.updateLastChecked(opportunityId)
+    .then((res) => {
+      const { opportunity } = res.data;
+      const opportunitiesObject = { [opportunity._id]: opportunity };
+      dispatch(add(opportunitiesObject));
+    })
+    .catch((err) => {
+      toast.error(err.message);
+      dispatch(addError(err.message));
+    });
+};

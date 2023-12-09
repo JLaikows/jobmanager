@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import Opportunity, { Status, TOpportunity } from '../../models/Opportunity';
 import { ResponseStatus } from '../../types/global';
+import mongoose from 'mongoose';
 
 /**
  * Used to update an opportunity
@@ -16,24 +17,29 @@ export const updateOpportunity = async (
   _id: string,
   userId: ObjectId,
 ): Promise<void> => {
-  Opportunity.findById(_id).then((opportunity) => {
-    if (!opportunity)
-      res.status(500).json({
-        status: ResponseStatus.FAILED,
-        errorMessage: 'Failed to find opportunity',
-      });
-    if (new ObjectId(opportunity?.userId ?? '') != userId) {
-      res.status(500).json({
-        status: ResponseStatus.FAILED,
-        errorMessage: 'Unauthorized to edit opportunity',
-      });
-    }
-    const payload = { ...opportunity, ...opportunityPayload };
-    payload.save().then((opportunity: any) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  Opportunity.findByIdAndUpdate(_id, opportunityPayload, { new: true })
+    .then(async (opportunity) => {
+      if (new ObjectId(opportunity?.userId ?? '') != userId) {
+        await session.abortTransaction();
+        res.status(500).json({
+          status: ResponseStatus.FAILED,
+          errorMessage: 'Unauthorized to edit opportunity',
+        });
+        return;
+      }
+      await session.commitTransaction();
       res.json({
         status: ResponseStatus.SUCCESS,
         opportunity: opportunity,
       });
+    })
+    .catch((e) => {
+      res.status(500).json({
+        status: ResponseStatus.FAILED,
+        errorMessage: e.message,
+      });
     });
-  });
 };

@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import Auth from '../../components/auth';
 import { Box } from '@mui/material';
 import { Taskbar } from '../../components/mobile/TaskBar';
 import OpportunityForm from '../../components/opportunityForm';

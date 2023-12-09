@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { FC, useEffect } from 'react';
-import { MobileOpportunityTableRow } from './OpportunityTableRow';
+import MobileOpportunityTableRow from './OpportunityTableRow';
 
 interface IMobileOpportunityTable {
   opportunities: any[];

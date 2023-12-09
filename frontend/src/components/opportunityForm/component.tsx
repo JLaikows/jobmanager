@@ -1,23 +1,21 @@
-import { FC, useMemo, useState } from 'react';
-import { TLoginUser, TSignUpUser } from '../../types/user';
+import { FC, useState } from 'react';
 import {
   Box,
   Button,
   Checkbox,
+  FormControlLabel,
   InputAdornment,
   InputLabel,
   TextField,
-  Typography,
 } from '@mui/material';
 import * as _ from 'lodash';
-import { dark } from '@mui/material/styles/createPalette';
 
 interface IAuth {
   createOpportunity: (opportunity: any) => void;
 }
 
 interface IJMTextField {
-  name: string;
+  name?: string;
   label?: string;
   type?: any;
   onChange?: any;
@@ -36,16 +34,33 @@ export const JMTextField: FC<IJMTextField> = (props) => (
 export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
   const [opportunityInfo, setOpportunityInfo] = useState({});
   const [salaryInfo, setSalaryInfo] = useState({ hourly: false, amount: 0 });
-  const [hoursInfo, setHoursInfo] = useState({ fullTime: true, maximum: 40 });
+  const [hoursInfo, setHoursInfo] = useState({ fullTime: true, minimum: 40 });
+  const [hasWebPortal, setHasWebPortal] = useState(false);
   const [webPortalInfo, setWebPortalInfo] = useState({});
-  const [contactInfo, setContactInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const onUpdate = (e: any) => {
     setOpportunityInfo({ ...opportunityInfo, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = () => {
-    createOpportunity({ ...opportunityInfo, salary: salaryInfo });
+  const onUpdateWebPortal = (e: any) => {
+    setWebPortalInfo({ ...webPortalInfo, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await createOpportunity({
+        ...opportunityInfo,
+        salary: salaryInfo,
+        hours: hoursInfo,
+        ...(hasWebPortal && { webPortal: webPortalInfo }),
+      });
+      setIsLoading(false);
+      window.location.href = 'http://localhost:3000/';
+    } catch {
+      setIsLoading(false);
+    }
   };
 
   const hourlyCheckbox = (
@@ -72,7 +87,9 @@ export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
       <InputLabel>FullTime</InputLabel>
     </>
   );
-
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
   return (
     <form
       onSubmit={onSubmit}
@@ -88,13 +105,11 @@ export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
     >
       <JMTextField
         onChange={(e: any) => onUpdate(e)}
-        key="a"
         label="Company Name"
         name="company"
       />
       <JMTextField
         onChange={(e: any) => onUpdate(e)}
-        key="b"
         label="Title"
         name="title"
       />
@@ -114,9 +129,9 @@ export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
       />
       <JMTextField
         onChange={(e: any) =>
-          setHoursInfo({ ...hoursInfo, maximum: Number(e.target.value) })
+          setHoursInfo({ ...hoursInfo, minimum: Number(e.target.value) })
         }
-        value={hoursInfo.maximum}
+        value={hoursInfo.minimum}
         disabled={hoursInfo.fullTime}
         type="number"
         InputProps={{
@@ -126,31 +141,36 @@ export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
         }}
         name="salary"
       />
-      <JMTextField
-        onChange={(e: any) => onUpdate(e)}
-        key="f"
-        label="Github"
-        name="github"
+      <FormControlLabel
+        control={<Checkbox onChange={() => setHasWebPortal(!hasWebPortal)} />}
+        label="Has Web Portal"
       />
-      <JMTextField
-        onChange={(e: any) => onUpdate(e)}
-        key="d "
-        label="Email"
-        name="email"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdate(e)}
-        key="1"
-        type="password"
-        label="Password"
-        name="password"
-      />
-      <Button
-        variant="contained"
-        onClick={() => {
-          console.log(salaryInfo);
-        }}
-      >
+      {hasWebPortal && (
+        <>
+          <JMTextField
+            onChange={(e: any) => onUpdateWebPortal(e)}
+            label="URL"
+            name="link"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateWebPortal(e)}
+            label="Email"
+            name="email"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateWebPortal(e)}
+            label="Username"
+            name="username"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateWebPortal(e)}
+            type="password"
+            label="Password"
+            name="password"
+          />
+        </>
+      )}
+      <Button variant="contained" onClick={onSubmit}>
         Create Opportunity
       </Button>
     </form>
