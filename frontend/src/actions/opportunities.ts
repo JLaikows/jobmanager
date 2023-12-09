@@ -52,3 +52,18 @@ export const updateLastChecked = (opportunityId: string) => (dispatch: any) => {
       dispatch(addError(err.message));
     });
 };
+
+export const updateOpportunity =
+  (opportunityId: string, opportunity: any) => (dispatch: any) => {
+    console.log('hit');
+    APIUtil.updateOpportunity(opportunityId, opportunity)
+      .then((res) => {
+        const { opportunity } = res.data;
+        const opportunitiesObject = { [opportunity._id]: opportunity };
+        dispatch(add(opportunitiesObject));
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        dispatch(addError(err.message));
+      });
+  };

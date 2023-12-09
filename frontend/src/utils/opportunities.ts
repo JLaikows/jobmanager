@@ -16,3 +16,7 @@ export const updateLastChecked = (opportunityId: string) => {
     apiServer + `/opportunities/${opportunityId}/update-last-checked`,
   );
 };
+
+export const updateOpportunity = (opportunityId: string, opportunity: any) => {
+  return axios.post(apiServer + `/opportunities/${opportunityId}`, opportunity);
+};

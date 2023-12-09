@@ -1,20 +1,33 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, MenuItem, Select, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
+
+const STATUS_OPTIONS = [
+  { label: 'Rejected', value: 'REJECTED' },
+  { label: 'On Going', value: 'ONGOING' },
+  { label: 'Submitted', value: 'SUBMITTED' },
+  { label: 'Interviewing', value: 'INTERVIEWING' },
+];
 
 interface IMobileOpportunityTableRow {
   opportunity: any;
   updateLastChecked: (opportunityId: string) => void;
+  updateOpportunity: (opportunityId: string, opportunity: any) => void;
 }
 
 export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   opportunity,
   updateLastChecked,
+  updateOpportunity,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { status, company, title, ...fullInfo } = opportunity;
   const extraInfo = {
     'Full Time': opportunity?.hours?.fullTime,
     Title: opportunity.title,
+  };
+
+  const onStatusChange = (e: any) => {
+    updateOpportunity(opportunity._id, { status: e.target.value });
   };
   return (
     <Box
@@ -32,7 +45,6 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
           justifyContent: 'space-between',
           padding: '3% 5%',
         }}
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         <Box
           sx={{
@@ -41,13 +53,20 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
             flexDirection: 'column',
             textAlign: 'left',
           }}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <Typography fontWeight="bold">{company}</Typography>
           <Typography fontSize="small" color="secondary">
             {title}
           </Typography>
         </Box>
-        <Typography>{status}</Typography>
+        <Select value={status} size="small" onChange={(e) => onStatusChange(e)}>
+          {STATUS_OPTIONS.map((option) => (
+            <MenuItem key={option.label} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
       </Box>
       {isMenuOpen && (
         <Box

@@ -26,7 +26,12 @@ export const MobileOpportunityTable: FC<IMobileOpportunityTable> = ({
       }}
     >
       {opportunities.map((opportunity) => {
-        return <MobileOpportunityTableRow opportunity={opportunity} />;
+        return (
+          <MobileOpportunityTableRow
+            key={opportunity.company + '-' + opportunity.title}
+            opportunity={opportunity}
+          />
+        );
       })}
     </Box>
   );
