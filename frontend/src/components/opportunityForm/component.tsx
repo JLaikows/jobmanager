@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 
 interface IAuth {
   createOpportunity: (opportunity: any) => void;
+  opportunity?: any;
 }
 
 interface IJMTextField {
@@ -31,12 +32,23 @@ export const JMTextField: FC<IJMTextField> = (props) => (
   </div>
 );
 
-export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
-  const [opportunityInfo, setOpportunityInfo] = useState({});
-  const [salaryInfo, setSalaryInfo] = useState({ hourly: false, amount: 0 });
-  const [hoursInfo, setHoursInfo] = useState({ fullTime: true, minimum: 40 });
-  const [hasWebPortal, setHasWebPortal] = useState(false);
-  const [webPortalInfo, setWebPortalInfo] = useState({});
+export const OpportunityForm: FC<IAuth> = ({
+  createOpportunity,
+  opportunity,
+}) => {
+  const [opportunityInfo, setOpportunityInfo] = useState(opportunity ?? {});
+  const [salaryInfo, setSalaryInfo] = useState(
+    opportunity?.salary ?? { hourly: false, amount: 0 },
+  );
+  const [hoursInfo, setHoursInfo] = useState(
+    opportunity?.hours ?? { fullTime: true, minimum: 40 },
+  );
+  const [hasWebPortal, setHasWebPortal] = useState(
+    !!opportunity?.webPortal ?? false,
+  );
+  const [webPortalInfo, setWebPortalInfo] = useState(
+    opportunity?.webPortal ?? {},
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const onUpdate = (e: any) => {
@@ -132,7 +144,7 @@ export const OpportunityForm: FC<IAuth> = ({ createOpportunity }) => {
           setHoursInfo({ ...hoursInfo, minimum: Number(e.target.value) })
         }
         value={hoursInfo.minimum}
-        disabled={hoursInfo.fullTime}
+        disabled={!hoursInfo.fullTime}
         type="number"
         InputProps={{
           endAdornment: (

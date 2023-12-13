@@ -15,6 +15,8 @@ export const Taskbar: FC = () => {
         backgroundColor: '#7A8D7D',
         display: 'flex',
         justifyContent: 'space-between',
+        // position: 'absolute',
+        top: 0,
       }}
     >
       <Button
