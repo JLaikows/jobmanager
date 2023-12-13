@@ -68,47 +68,52 @@ const contact = {
   },
 };
 
-const opportunitySchema = new mongoose.Schema({
-  company: String,
-  title: String,
-  salary: {
-    hourly: Boolean,
-    amount: Number,
-  },
-  hours: {
-    fullTime: Boolean,
-    minimum: Number,
-    maximum: {
-      type: Number,
+const opportunitySchema = new mongoose.Schema(
+  {
+    company: String,
+    title: String,
+    salary: {
+      hourly: Boolean,
+      amount: Number,
+    },
+    hours: {
+      fullTime: Boolean,
+      minimum: Number,
+      maximum: {
+        type: Number,
+        required: false,
+      },
+    },
+    webPortal: {
+      type: {
+        link: String,
+        password: String,
+        email: {
+          type: String,
+          required: false,
+        },
+        username: {
+          type: String,
+          required: false,
+        },
+      },
       required: false,
     },
-  },
-  webPortal: {
-    type: {
-      link: String,
-      password: String,
-      email: {
-        type: String,
-        required: false,
-      },
-      username: {
-        type: String,
-        required: false,
-      },
+    status: String,
+    lastChecked: String,
+    contact: {
+      type: contact,
+      required: false,
     },
-    required: false,
+    secondaryContact: {
+      type: contact,
+      required: false,
+    },
+    userId: String,
   },
-  status: String,
-  lastChecked: String,
-  contact: {
-    type: contact,
-    required: false,
+  {
+    timestamps: true,
   },
-  secondaryContact: {
-    type: contact,
-    required: false,
-  },
-  userId: String,
-});
+);
 
 export default mongoose.model('Opportunity', opportunitySchema);
