@@ -166,18 +166,18 @@ export const OpportunityForm: FC<IAuth> = ({
           />
           <JMTextField
             onChange={(e: any) => onUpdateWebPortal(e)}
-            label="Email"
+            label="Portal Email"
             name="email"
           />
           <JMTextField
             onChange={(e: any) => onUpdateWebPortal(e)}
-            label="Username"
+            label="Portal Username"
             name="username"
           />
           <JMTextField
             onChange={(e: any) => onUpdateWebPortal(e)}
             type="password"
-            label="Password"
+            label="Portal Password"
             name="password"
           />
         </>
