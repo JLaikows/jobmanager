@@ -1,8 +1,6 @@
 import { Box, Button, MenuItem, Select, Typography } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
-import { timeSince } from '../../../../utils/time';
-//temp used while types are unavailable for pretty-date - should be updated to es6
-import { prettyDate } from '@based/pretty-date';
+import { FC, useState } from 'react';
+import { format as formatToDollar } from '../../../../utils/format';
 
 const STATUS_OPTIONS = [
   { label: 'Rejected', value: 'REJECTED' },
@@ -23,18 +21,19 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   updateOpportunity,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { status, company, title, ...fullInfo } = opportunity;
+  const { status, company, title, createdAt } = opportunity;
   const lastCheckedObject = new Date(opportunity.lastChecked);
-  const lastChecked = lastCheckedObject.toString();
+  const lastChecked = lastCheckedObject.toDateString();
   const extraInfo = {
     'Full Time': opportunity?.hours?.fullTime,
     Title: opportunity.title,
-    pay:
-      opportunity.salary?.amount < 0
-        ? opportunity.salary?.amount
+    Pay:
+      opportunity.salary?.amount >= 0
+        ? formatToDollar(opportunity.salary?.amount)
         : 'Not Listed',
   };
   const hasWebPortal = !!opportunity.webPortal;
+  const FormattedCreatedAt = new Date(opportunity.createdAt).toDateString();
 
   const onStatusChange = (e: any) => {
     updateOpportunity(opportunity._id, { status: e.target.value });
@@ -76,6 +75,13 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
           </Typography>
           <Typography fontSize="small" color="secondary">
             {title}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontSize: '10px' }}
+            color="secondary"
+          >
+            Applied:&nbsp;{FormattedCreatedAt}
           </Typography>
         </Box>
         <Select value={status} size="small" onChange={(e) => onStatusChange(e)}>
@@ -133,12 +139,12 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
                   flexDirection: 'row',
                 }}
               >
-                <Typography>Link:&nbsp;</Typography>
-                <Typography>{opportunity.webPortal.link}</Typography>
+                <a href={opportunity.webPortal.link} target="_blank">
+                  Click to open Web Portal
+                </a>
               </Box>
               <Box
                 sx={{
-                  overflow: 'scroll',
                   display: 'flex',
                   flexDirection: 'row',
                 }}
@@ -154,7 +160,6 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
               </Box>
               <Box
                 sx={{
-                  overflow: 'scroll',
                   display: 'flex',
                   flexDirection: 'row',
                 }}

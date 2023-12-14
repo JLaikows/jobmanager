@@ -26,3 +26,8 @@ export const timeSince = (date: Date) => {
   }
   return Math.floor(seconds) + ' seconds';
 };
+
+export const { format } = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
