@@ -21,6 +21,7 @@ export type TAddress = {
   region: string;
   postalCode: string;
   country: string;
+  hybrid: boolean;
 };
 
 export type TContact = {
@@ -69,6 +70,7 @@ const address = {
   region: String,
   postalCode: String,
   country: String,
+  hybrid: Boolean,
 };
 
 const contact = {
