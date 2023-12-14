@@ -14,8 +14,9 @@ export type Milestone = {
 
 //todo: update address to use google api
 //todo: implement into opportunities
-export type Address = {
+export type TAddress = {
   street: string;
+  apt: string;
   city: string;
   region: string;
   postalCode: string;
@@ -33,7 +34,8 @@ export type TOpportunity = {
   _id: string;
   company: string;
   title: string;
-  jobListingURL: string;
+  jobListingURL?: string;
+  isRemote?: boolean;
   salary: {
     hourly: boolean;
     amount: number;
@@ -53,7 +55,20 @@ export type TOpportunity = {
   lastChecked: String;
   contact?: TContact;
   secondaryContact?: TContact;
+  address: TAddress;
   userId: string;
+};
+
+const address = {
+  street: String,
+  apt: {
+    type: String,
+    required: false,
+  },
+  city: String,
+  region: String,
+  postalCode: String,
+  country: String,
 };
 
 const contact = {
@@ -89,6 +104,10 @@ const opportunitySchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    isRemote: {
+      type: Boolean,
+      required: false,
+    },
     webPortal: {
       type: {
         link: String,
@@ -112,6 +131,10 @@ const opportunitySchema = new mongoose.Schema(
     },
     secondaryContact: {
       type: contact,
+      required: false,
+    },
+    address: {
+      type: address,
       required: false,
     },
     userId: String,
