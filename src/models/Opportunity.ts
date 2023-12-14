@@ -33,6 +33,7 @@ export type TOpportunity = {
   _id: string;
   company: string;
   title: string;
+  jobListingURL: string;
   salary: {
     hourly: boolean;
     amount: number;
@@ -83,6 +84,10 @@ const opportunitySchema = new mongoose.Schema(
         type: Number,
         required: false,
       },
+    },
+    jobListingURL: {
+      type: String,
+      required: false,
     },
     webPortal: {
       type: {
