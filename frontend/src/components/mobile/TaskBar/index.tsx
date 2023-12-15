@@ -1,35 +1,42 @@
-import { Box, Button, Typography } from '@mui/material';
-import { FC } from 'react';
+import { Box, Button, Modal, Typography } from '@mui/material';
+import { FC, useState } from 'react';
 import LogoutButton from '../../logoutButton';
+import OpportunityForm from '../../opportunityForm';
+import * as styles from './styles';
 
 export const Taskbar: FC = () => {
+  const [isCreateOpportunityOpen, setIsCreateOpportunityOpen] = useState(false);
   const onClick = () => {
-    window.location.href = 'http://localhost:3000/create';
+    setIsCreateOpportunityOpen(true);
+  };
+  const onClose = () => {
+    setIsCreateOpportunityOpen(false);
   };
 
   return (
-    <Box
-      sx={{
-        height: '30px',
-        padding: '10px 10px',
-        backgroundColor: '#7A8D7D',
-        display: 'flex',
-        justifyContent: 'space-between',
-        // position: 'absolute',
-        top: 0,
-      }}
-    >
+    <Box sx={styles.taskbarContainer}>
       <Button
         value="redirect"
         variant="text"
         color="secondary"
         onClick={onClick}
       >
-        <Typography fontWeight="bold" color="white" variant="h4">
-          +
-        </Typography>
+        {!isCreateOpportunityOpen && (
+          <Typography fontWeight="bold" color="white" variant="h4">
+            +
+          </Typography>
+        )}
       </Button>
       <LogoutButton />
+      <Modal
+        open={isCreateOpportunityOpen}
+        onClose={onClose}
+        sx={{ overflow: 'scroll' }}
+      >
+        <Box sx={styles.modalContainer}>
+          <OpportunityForm onClose={onClose} />
+        </Box>
+      </Modal>
     </Box>
   );
 };

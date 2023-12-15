@@ -1,8 +1,9 @@
 import MobileOpportunityTable from '../../components/mobile/OpportunitiyTable';
-import { Box } from '@mui/material';
+import { Box, Button, Modal } from '@mui/material';
 import { Taskbar } from '../../components/mobile/TaskBar';
 import RequireAuth from '../../components/requireAuth';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import OpportunityForm from '../../components/opportunityForm';
 
 const OpportunitiesPage: FC = () => {
   return (

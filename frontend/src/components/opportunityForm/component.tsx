@@ -15,6 +15,7 @@ import { TAddress, TOpportunity } from '../../types/opportunity';
 interface IAuth {
   createOpportunity: (opportunity: any) => void;
   opportunity?: TOpportunity;
+  onClose?: () => void;
 }
 
 interface IJMTextField {
@@ -44,6 +45,7 @@ export const JMTextField: FC<IJMTextField> = (props) => (
 export const OpportunityForm: FC<IAuth> = ({
   createOpportunity,
   opportunity,
+  onClose,
 }) => {
   const [opportunityInfo, setOpportunityInfo] = useState(opportunity ?? {});
   const [salaryInfo, setSalaryInfo] = useState(
@@ -76,6 +78,10 @@ export const OpportunityForm: FC<IAuth> = ({
     setOpportunityInfo({ ...opportunityInfo, [e.target.name]: e.target.value });
   };
 
+  const updateSalaryInfo = (e: any) => {
+    setSalaryInfo({ ...salaryInfo, [e.target.name]: Number(e.target.value) });
+  };
+
   const onUpdateWebPortal = (e: any) => {
     setWebPortalInfo({ ...webPortalInfo, [e.target.name]: e.target.value });
   };
@@ -95,14 +101,14 @@ export const OpportunityForm: FC<IAuth> = ({
         ...(hasWebPortal && { webPortal: webPortalInfo }),
       });
       setIsLoading(false);
-      window.location.href = 'http://localhost:3000/';
-    } catch {
-      setIsLoading(false);
-    }
+      // window.location.href = 'http://localhost:3000/';
+    } catch {}
+    setIsLoading(false);
+    onClose && onClose();
   };
 
   const hourlyCheckbox = (
-    <>
+    <InputAdornment position="end">
       <Checkbox
         value={salaryInfo.hourly}
         onChange={() =>
@@ -111,10 +117,10 @@ export const OpportunityForm: FC<IAuth> = ({
         title="Hourly"
       />
       <InputLabel>Hourly</InputLabel>
-    </>
+    </InputAdornment>
   );
   const fullTimeCheckbox = (
-    <>
+    <InputAdornment position="end">
       <Checkbox
         value={salaryInfo.hourly}
         onChange={() =>
@@ -123,42 +129,22 @@ export const OpportunityForm: FC<IAuth> = ({
         title="Full Time"
       />
       <InputLabel>FullTime</InputLabel>
-    </>
+    </InputAdornment>
   );
   const addressForm = (
     <>
+      <JMTextField onChange={onUpdateAddress} label="Street" name="street" />
+      <JMTextField onChange={onUpdateAddress} label="Street #2" name="apt" />
+      <JMTextField onChange={onUpdateAddress} label="City" name="city" />
+      <JMTextField onChange={onUpdateAddress} label="Region" name="region" />
       <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
-        label="Street"
-        name="street"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
-        label="Street #2"
-        name="apt"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
-        label="City"
-        name="city"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
-        label="Region"
-        name="region"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
+        onChange={onUpdateAddress}
         label="Postal Code"
         name="postalCode"
       />
-      <JMTextField
-        onChange={(e: any) => onUpdateAddress(e)}
-        label="Country"
-        name="country"
-      />
+      <JMTextField onChange={onUpdateAddress} label="Country" name="country" />
       <FormControlLabel
-        control={<Checkbox onChange={(e: any) => onUpdateAddress(e)} />}
+        control={<Checkbox onChange={onUpdateAddress} />}
         label="is Hybrid"
         name="hybrid"
         value={addressInfo.hybrid}
@@ -168,23 +154,19 @@ export const OpportunityForm: FC<IAuth> = ({
 
   const webPortalForm = (
     <>
+      <JMTextField onChange={onUpdateWebPortal} label="URL" name="link" />
       <JMTextField
-        onChange={(e: any) => onUpdateWebPortal(e)}
-        label="URL"
-        name="link"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdateWebPortal(e)}
+        onChange={onUpdateWebPortal}
         label="Portal Email"
         name="email"
       />
       <JMTextField
-        onChange={(e: any) => onUpdateWebPortal(e)}
+        onChange={onUpdateWebPortal}
         label="Portal Username"
         name="username"
       />
       <JMTextField
-        onChange={(e: any) => onUpdateWebPortal(e)}
+        onChange={onUpdateWebPortal}
         type="password"
         label="Portal Password"
         name="password"
@@ -216,27 +198,17 @@ export const OpportunityForm: FC<IAuth> = ({
           Create An Opportunity
         </Typography>
       </div>
-      <JMTextField
-        onChange={(e: any) => onUpdate(e)}
-        label="Company Name"
-        name="company"
-      />
-      <JMTextField
-        onChange={(e: any) => onUpdate(e)}
-        label="Title"
-        name="title"
-      />
+      <JMTextField onChange={onUpdate} label="Company Name" name="company" />
+      <JMTextField onChange={onUpdate} label="Title" name="title" />
       <JMTextField
         onChange={(e: any) =>
           setSalaryInfo({ ...salaryInfo, amount: Number(e.target.value) })
         }
-        label=""
+        label="Salary"
         type="number"
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
-          endAdornment: (
-            <InputAdornment position="end">{hourlyCheckbox}</InputAdornment>
-          ),
+          endAdornment: hourlyCheckbox,
         }}
         name="salary"
       />
@@ -248,9 +220,7 @@ export const OpportunityForm: FC<IAuth> = ({
         disabled={!hoursInfo.fullTime}
         type="number"
         InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">{fullTimeCheckbox}</InputAdornment>
-          ),
+          endAdornment: fullTimeCheckbox,
         }}
         name="salary"
       />
@@ -264,8 +234,8 @@ export const OpportunityForm: FC<IAuth> = ({
         label="Remote"
         value={isRemote}
       />
-      {!isRemote && addressForm}
-      <div
+      {!isRemote ? addressForm : null}
+      <Box
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -274,8 +244,10 @@ export const OpportunityForm: FC<IAuth> = ({
         <Button variant="contained" onClick={onSubmit}>
           Create Opportunity
         </Button>
-        <Button variant="outlined">Cancel</Button>
-      </div>
+        <Button variant="outlined" onClick={onClose}>
+          Cancel
+        </Button>
+      </Box>
     </form>
   );
 };
