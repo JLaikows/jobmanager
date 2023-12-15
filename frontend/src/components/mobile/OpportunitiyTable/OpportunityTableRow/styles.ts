@@ -3,7 +3,7 @@ export const rowContainer = (isRejected: boolean) => ({
   backgroundColor: isRejected ? 'lightgrey' : '',
   flexDirection: 'column',
   justifyContent: 'center',
-  border: '2px solid #7A8D7D',
+  //   border: '2px solid #7A8D7D',
   transitionDuration: '1s',
 });
 

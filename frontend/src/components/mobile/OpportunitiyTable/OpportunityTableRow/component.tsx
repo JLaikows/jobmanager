@@ -53,6 +53,10 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
 
   const lastCheckedObject = new Date(lastChecked);
   const formattedLastChecked = lastCheckedObject.toDateString();
+  const buttonColor =
+    formattedLastChecked === new Date(Date.now()).toDateString()
+      ? 'primary'
+      : 'warning';
   const hasWebPortal = !!webPortal;
   const FormattedCreatedAt = new Date(createdAt).toDateString();
   const formattedAddress = formatAdress(address);
@@ -63,7 +67,10 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   };
 
   const openCloseMenu = () => setIsMenuOpen(!isMenuOpen);
-  const callUpdateLastChecked = () => updateLastChecked(_id);
+  const callUpdateLastChecked = async () => {
+    await updateLastChecked(_id);
+    setIsMenuOpen(false);
+  };
   const onStatusChange = (e: SelectChangeEvent<Status>) => {
     updateOpportunity(_id, { status: e.target.value as Status });
   };
@@ -93,11 +100,12 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
           ))}
         </Select>
       </Box>
-      {isMenuOpen && (
+      {isMenuOpen ? (
         <Box sx={styles.menuContainer}>
           <Button
             sx={styles.lastCheckedButton}
-            variant="contained"
+            variant="outlined"
+            color={buttonColor}
             onClick={callUpdateLastChecked}
           >
             Last Checked: {formattedLastChecked}
@@ -136,7 +144,7 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
             </>
           ) : null}
         </Box>
-      )}
+      ) : null}
     </Box>
   );
 };

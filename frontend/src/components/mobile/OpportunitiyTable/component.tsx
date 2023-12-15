@@ -1,9 +1,11 @@
 import { Box, Checkbox, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import MobileOpportunityTableRow from './OpportunityTableRow';
+import * as styles from './styles';
+import { TOpportunity } from '../../../types/opportunity';
 
 interface IMobileOpportunityTable {
-  opportunities: any[];
+  opportunities: TOpportunity[];
   getAllOpportunities: () => void;
 }
 
@@ -14,42 +16,25 @@ export const MobileOpportunityTable: FC<IMobileOpportunityTable> = ({
   const [showRejected, setShowRejected] = useState(false);
   useEffect(() => {
     getAllOpportunities();
-  }, []);
+  }, [getAllOpportunities]);
+
+  const updateShowRejected = () => setShowRejected(!showRejected);
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 0,
-        marging: 0,
-        width: '100%',
-      }}
-    >
+    <Box sx={styles.opportunityContainer}>
       <Typography>
-        <Checkbox
-          value={showRejected}
-          onChange={() => setShowRejected(!showRejected)}
-        />
+        <Checkbox value={showRejected} onChange={updateShowRejected} />
         Show Rejected
       </Typography>
-      <Box
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '2%',
-          width: '95%',
-          border: '2px solid #7A8D7D',
-          borderRadius: '10px',
-          transitionDuration: '1s',
-        }}
-      >
-        {opportunities.map((opportunity) => {
-          if (!showRejected && opportunity.status === 'REJECTED') return;
+      <Box sx={styles.opportunitiesRowContainer} className="table">
+        {opportunities.map((opportunity, i) => {
+          if (!showRejected && opportunity.status === 'REJECTED') return null;
           return (
-            <MobileOpportunityTableRow
-              key={opportunity.company + '-' + opportunity.title}
-              opportunity={opportunity}
-            />
+            <Box sx={styles.getRowColor(i)}>
+              <MobileOpportunityTableRow
+                key={opportunity.company + '-' + opportunity.title}
+                opportunity={opportunity}
+              />
+            </Box>
           );
         })}
       </Box>
