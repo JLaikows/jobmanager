@@ -4,8 +4,9 @@ import {
   updateOpportunity,
 } from '../../../../actions/opportunities';
 import { MobileOpportunityTableRow } from './component';
+import { TState } from '../../../../types/state';
 
-const mSTP = (state: any) => ({});
+const mSTP = (state: TState) => ({});
 
 const mDTP = (dispatch: any) => ({
   updateLastChecked: (opportunityId: string) =>

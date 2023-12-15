@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { OpportunityForm } from './component';
 import { createOpportunity } from '../../actions/opportunities';
+import { TState } from '../../types/state';
 
-const mSTP = (state: any) => ({});
+const mSTP = (state: TState) => ({});
 
 const mDTP = (dispatch: any) => ({
   createOpportunity: (opportunity: any) =>

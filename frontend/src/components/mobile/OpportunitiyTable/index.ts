@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { getAllOpportunities } from '../../../actions/opportunities';
 import { MobileOpportunityTable } from './component';
+import { TState } from '../../../types/state';
 
-const mSTP = (state: any) => ({
+const mSTP = (state: TState) => ({
   opportunities: Object.values(state.entities.opportunities).sort(
     (a: any, b: any) => {
       //sorts the values by the lastChecked, from oldest to most recent
