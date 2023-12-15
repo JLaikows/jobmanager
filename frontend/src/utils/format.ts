@@ -1,3 +1,5 @@
+import { TAddress } from '../types/opportunity';
+
 export const timeSince = (date: Date) => {
   const seconds = Math.floor(
     (new Date().getSeconds() - date.getSeconds()) / 1000,
@@ -31,3 +33,18 @@ export const { format } = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
+
+export const formatAdress = (addressObject?: TAddress) => {
+  if (!addressObject) return null;
+  return (
+    addressObject.street +
+    ' ' +
+    addressObject.apt +
+    ', ' +
+    addressObject.city +
+    ', ' +
+    addressObject.region +
+    ' ' +
+    addressObject.postalCode
+  );
+};

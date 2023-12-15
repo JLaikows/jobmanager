@@ -1,6 +1,17 @@
-import { Box, Button, MenuItem, Select, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 import { FC, useState } from 'react';
-import { format as formatToDollar } from '../../../../utils/format';
+import {
+  formatAdress,
+  format as formatToDollar,
+} from '../../../../utils/format';
+import { TOpportunity } from '../../../../types/opportunity';
 
 const STATUS_OPTIONS = [
   { label: 'Rejected', value: 'REJECTED' },
@@ -10,9 +21,12 @@ const STATUS_OPTIONS = [
 ];
 
 interface IMobileOpportunityTableRow {
-  opportunity: any;
+  opportunity: TOpportunity;
   updateLastChecked: (opportunityId: string) => void;
-  updateOpportunity: (opportunityId: string, opportunity: any) => void;
+  updateOpportunity: (
+    opportunityId: string,
+    opportunity: Partial<TOpportunity>,
+  ) => void;
 }
 
 export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
@@ -21,27 +35,38 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   updateOpportunity,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { status, company, title, createdAt } = opportunity;
-  const lastCheckedObject = new Date(opportunity.lastChecked);
-  const lastChecked = lastCheckedObject.toDateString();
+  console.log(opportunity);
+  const {
+    _id,
+    status,
+    company,
+    title,
+    createdAt,
+    lastChecked,
+    webPortal,
+    address,
+    isRemote,
+    salary: { amount: minimumSalary },
+    hours: { fullTime },
+  } = opportunity;
+  const lastCheckedObject = new Date(lastChecked);
+  const formattedLastChecked = lastCheckedObject.toDateString();
   const extraInfo = {
-    'Full Time': opportunity?.hours?.fullTime,
-    Title: opportunity.title,
-    Pay:
-      opportunity.salary?.amount >= 0
-        ? formatToDollar(opportunity.salary?.amount)
-        : 'Not Listed',
+    'Full Time': fullTime,
+    Title: title,
+    Pay: minimumSalary >= 0 ? formatToDollar(minimumSalary) : 'Not Listed',
   };
-  const hasWebPortal = !!opportunity.webPortal;
-  const FormattedCreatedAt = new Date(opportunity.createdAt).toDateString();
+  const hasWebPortal = !!webPortal;
+  const FormattedCreatedAt = new Date(createdAt).toDateString();
 
+  const formattedAddress = formatAdress(address);
   const onStatusChange = (e: any) => {
-    updateOpportunity(opportunity._id, { status: e.target.value });
+    updateOpportunity(_id, { status: e.target.value });
   };
-  const isRejected = opportunity.status === 'REJECTED';
+  const isRejected = status === 'REJECTED';
   return (
     <Box
-      key={opportunity.company + opportunity.title + opportunity.lastChecked}
+      key={company + title + lastChecked}
       style={{
         display: 'flex',
         backgroundColor: isRejected ? 'lightgrey' : '',
@@ -104,9 +129,9 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
           <Button
             sx={{ width: '75%' }}
             variant="contained"
-            onClick={() => updateLastChecked(opportunity._id)}
+            onClick={() => updateLastChecked(_id)}
           >
-            Last Checked: {lastChecked}
+            Last Checked: {formattedLastChecked}
           </Button>
           <Box
             sx={{
@@ -122,7 +147,6 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
               </div>
             ))}
           </Box>
-
           {hasWebPortal && (
             <Box
               sx={{
@@ -139,7 +163,7 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
                   flexDirection: 'row',
                 }}
               >
-                <a href={opportunity.webPortal.link} target="_blank">
+                <a href={webPortal?.link} target="_blank">
                   Click to open Web Portal
                 </a>
               </Box>
@@ -150,12 +174,11 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
                 }}
               >
                 <Typography>
-                  {opportunity.webPortal.username ? 'Username' : 'Email'}:&nbsp;
+                  {webPortal?.username ? 'Username' : 'Email'}
+                  :&nbsp;
                 </Typography>
                 <Typography>
-                  {opportunity.webPortal.username
-                    ? opportunity.webPortal.username
-                    : opportunity.webPortal.email}
+                  {webPortal?.username ? webPortal?.username : webPortal?.email}
                 </Typography>
               </Box>
               <Box
@@ -165,9 +188,19 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
                 }}
               >
                 <Typography>Password:&nbsp;</Typography>
-                <Typography>{opportunity.webPortal.password}</Typography>
+                <Typography>{webPortal?.password}</Typography>
               </Box>
             </Box>
+          )}
+          {!isRemote && (
+            <>
+              <Typography fontSize="small" color="secondary">
+                {formattedAddress}
+              </Typography>
+              <Typography fontSize="small" color="secondary">
+                <Checkbox disabled value={address?.hybrid} />
+              </Typography>
+            </>
           )}
         </Box>
       )}

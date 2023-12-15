@@ -9,10 +9,11 @@ import {
   TextField,
 } from '@mui/material';
 import * as _ from 'lodash';
+import { TAddress, TOpportunity } from '../../types/opportunity';
 
 interface IAuth {
   createOpportunity: (opportunity: any) => void;
-  opportunity?: any;
+  opportunity?: TOpportunity;
 }
 
 interface IJMTextField {
@@ -49,6 +50,18 @@ export const OpportunityForm: FC<IAuth> = ({
   const [webPortalInfo, setWebPortalInfo] = useState(
     opportunity?.webPortal ?? {},
   );
+  const [isRemote, setIsRemote] = useState<boolean>(false);
+  const [addressInfo, setAddressInfo] = useState<TAddress>(
+    opportunity?.address ?? {
+      street: '',
+      apt: '',
+      city: '',
+      region: '',
+      postalCode: '',
+      country: '',
+      hybrid: false,
+    },
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const onUpdate = (e: any) => {
@@ -59,6 +72,10 @@ export const OpportunityForm: FC<IAuth> = ({
     setWebPortalInfo({ ...webPortalInfo, [e.target.name]: e.target.value });
   };
 
+  const onUpdateAddress = (e: any) => {
+    setAddressInfo({ ...addressInfo, [e.target.name]: e.target.value });
+  };
+
   const onSubmit = async () => {
     setIsLoading(true);
     try {
@@ -66,6 +83,7 @@ export const OpportunityForm: FC<IAuth> = ({
         ...opportunityInfo,
         salary: salaryInfo,
         hours: hoursInfo,
+        address: addressInfo,
         ...(hasWebPortal && { webPortal: webPortalInfo }),
       });
       setIsLoading(false);
@@ -179,6 +197,58 @@ export const OpportunityForm: FC<IAuth> = ({
             type="password"
             label="Portal Password"
             name="password"
+          />
+        </>
+      )}
+      <FormControlLabel
+        control={<Checkbox onChange={() => setIsRemote(!isRemote)} />}
+        label="Remote"
+        value={isRemote}
+      />
+      {!isRemote && (
+        // street: string;
+        // apt: string;
+        // city: string;
+        // region: string;
+        // postalCode: string;
+        // country: string;
+        // hybrid: boolean;
+        <>
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="Street"
+            name="street"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="Street #2"
+            name="apt"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="City"
+            name="city"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="Region"
+            name="region"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="Postal Code"
+            name="postalCode"
+          />
+          <JMTextField
+            onChange={(e: any) => onUpdateAddress(e)}
+            label="Country"
+            name="country"
+          />
+          <FormControlLabel
+            control={<Checkbox onChange={(e: any) => onUpdateAddress(e)} />}
+            label="is Hybrid"
+            name="hybrid"
+            value={addressInfo.hybrid}
           />
         </>
       )}

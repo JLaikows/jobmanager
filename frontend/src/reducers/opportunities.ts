@@ -1,3 +1,4 @@
+import { TOpportunity } from '../types/opportunity';
 import { UserActions } from './user';
 
 export enum OpportunityActions {
@@ -6,11 +7,17 @@ export enum OpportunityActions {
   ADD_OPPORTUNITY = 'ADD_OPPORTUNITY',
 }
 
-const initialState: any | undefined = {
-  opportunity: {},
+export type TOpportunityAction = {
+  type: OpportunityActions | UserActions;
+  opportunities: TOpportunity | undefined;
 };
 
-const opportunityReducer = (state = initialState, action: any) => {
+const initialState: { [key: string]: TOpportunity } = {};
+
+const opportunityReducer = (
+  state = initialState,
+  action: TOpportunityAction,
+) => {
   switch (action.type) {
     case OpportunityActions.UPDATE_OPPORTUNITY:
       return {

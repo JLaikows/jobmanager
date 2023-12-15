@@ -15,6 +15,7 @@ export const MobileOpportunityTable: FC<IMobileOpportunityTable> = ({
   useEffect(() => {
     getAllOpportunities();
   }, []);
+  console.log(opportunities);
   return (
     <Box
       sx={{
