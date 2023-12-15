@@ -35,7 +35,6 @@ export const MobileOpportunityTableRow: FC<IMobileOpportunityTableRow> = ({
   updateOpportunity,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log(opportunity);
   const {
     _id,
     status,

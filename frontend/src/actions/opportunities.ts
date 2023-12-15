@@ -55,7 +55,6 @@ export const updateLastChecked = (opportunityId: string) => (dispatch: any) => {
 
 export const updateOpportunity =
   (opportunityId: string, opportunity: any) => (dispatch: any) => {
-    console.log('hit');
     APIUtil.updateOpportunity(opportunityId, opportunity)
       .then((res) => {
         const { opportunity } = res.data;
