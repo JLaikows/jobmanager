@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Login } from '../../pages/Login/lindex';
+import { Login } from '../../pages/Login';
 
 interface IRequireAuth {
   user: any;

@@ -8,8 +8,8 @@ interface ILogoutButton {
 export const LogoutButton: FC<ILogoutButton> = ({ logout }) => {
   return (
     <Button variant="text" color="secondary" onClick={logout}>
-      <Typography fontWeight="bold" color="white">
-        LogOut
+      <Typography fontWeight="bold" color="white" variant="h6">
+        Log out
       </Typography>
     </Button>
   );

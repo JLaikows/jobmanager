@@ -7,6 +7,7 @@ import {
   InputAdornment,
   InputLabel,
   TextField,
+  Typography,
 } from '@mui/material';
 import * as _ from 'lodash';
 import { TAddress, TOpportunity } from '../../types/opportunity';
@@ -28,8 +29,15 @@ interface IJMTextField {
 }
 
 export const JMTextField: FC<IJMTextField> = (props) => (
-  <div style={{ padding: '2% 0%', width: '100%' }}>
-    <TextField {...props}></TextField>
+  <div
+    style={{
+      padding: '2% 0%',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'left',
+    }}
+  >
+    <TextField {...props} fullWidth></TextField>
   </div>
 );
 
@@ -117,6 +125,72 @@ export const OpportunityForm: FC<IAuth> = ({
       <InputLabel>FullTime</InputLabel>
     </>
   );
+  const addressForm = (
+    <>
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="Street"
+        name="street"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="Street #2"
+        name="apt"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="City"
+        name="city"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="Region"
+        name="region"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="Postal Code"
+        name="postalCode"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateAddress(e)}
+        label="Country"
+        name="country"
+      />
+      <FormControlLabel
+        control={<Checkbox onChange={(e: any) => onUpdateAddress(e)} />}
+        label="is Hybrid"
+        name="hybrid"
+        value={addressInfo.hybrid}
+      />
+    </>
+  );
+
+  const webPortalForm = (
+    <>
+      <JMTextField
+        onChange={(e: any) => onUpdateWebPortal(e)}
+        label="URL"
+        name="link"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateWebPortal(e)}
+        label="Portal Email"
+        name="email"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateWebPortal(e)}
+        label="Portal Username"
+        name="username"
+      />
+      <JMTextField
+        onChange={(e: any) => onUpdateWebPortal(e)}
+        type="password"
+        label="Portal Password"
+        name="password"
+      />
+    </>
+  );
   if (isLoading) {
     return <div>Loading</div>;
   }
@@ -126,13 +200,22 @@ export const OpportunityForm: FC<IAuth> = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        padding: '10% 5%',
-        width: '80%',
-        border: '2px solid #7A8D7D',
-        borderRadius: '10px',
+        justifyContent: 'left',
         transitionDuration: '1s',
       }}
     >
+      <div
+        style={{
+          padding: '2% 0%',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'left',
+        }}
+      >
+        <Typography variant="h5" color="secondary">
+          Create An Opportunity
+        </Typography>
+      </div>
       <JMTextField
         onChange={(e: any) => onUpdate(e)}
         label="Company Name"
@@ -175,86 +258,24 @@ export const OpportunityForm: FC<IAuth> = ({
         control={<Checkbox onChange={() => setHasWebPortal(!hasWebPortal)} />}
         label="Has Web Portal"
       />
-      {hasWebPortal && (
-        <>
-          <JMTextField
-            onChange={(e: any) => onUpdateWebPortal(e)}
-            label="URL"
-            name="link"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateWebPortal(e)}
-            label="Portal Email"
-            name="email"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateWebPortal(e)}
-            label="Portal Username"
-            name="username"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateWebPortal(e)}
-            type="password"
-            label="Portal Password"
-            name="password"
-          />
-        </>
-      )}
+      {hasWebPortal && webPortalForm}
       <FormControlLabel
         control={<Checkbox onChange={() => setIsRemote(!isRemote)} />}
         label="Remote"
         value={isRemote}
       />
-      {!isRemote && (
-        // street: string;
-        // apt: string;
-        // city: string;
-        // region: string;
-        // postalCode: string;
-        // country: string;
-        // hybrid: boolean;
-        <>
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="Street"
-            name="street"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="Street #2"
-            name="apt"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="City"
-            name="city"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="Region"
-            name="region"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="Postal Code"
-            name="postalCode"
-          />
-          <JMTextField
-            onChange={(e: any) => onUpdateAddress(e)}
-            label="Country"
-            name="country"
-          />
-          <FormControlLabel
-            control={<Checkbox onChange={(e: any) => onUpdateAddress(e)} />}
-            label="is Hybrid"
-            name="hybrid"
-            value={addressInfo.hybrid}
-          />
-        </>
-      )}
-      <Button variant="contained" onClick={onSubmit}>
-        Create Opportunity
-      </Button>
+      {!isRemote && addressForm}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Button variant="contained" onClick={onSubmit}>
+          Create Opportunity
+        </Button>
+        <Button variant="outlined">Cancel</Button>
+      </div>
     </form>
   );
 };

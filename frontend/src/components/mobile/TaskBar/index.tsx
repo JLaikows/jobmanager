@@ -25,7 +25,7 @@ export const Taskbar: FC = () => {
         color="secondary"
         onClick={onClick}
       >
-        <Typography fontWeight="bold" color="white">
+        <Typography fontWeight="bold" color="white" variant="h4">
           +
         </Typography>
       </Button>
